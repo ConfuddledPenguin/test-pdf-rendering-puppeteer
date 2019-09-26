@@ -1,0 +1,87 @@
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,900&display=swap" rel="stylesheet">
+		<link rel='stylesheet' href='styles/main.css'>
+		<script src='https://unpkg.com/mustache@3.1.0/mustache.js' type='application/javascript'></script>
+	</head>
+	<body>
+		<header>
+			<div class='company-name'>
+				My Company
+			</div>
+		</header>
+		<main>
+			<div class='letter-header'>
+				<div class='my-address'>
+
+				</div>
+				<div class='your-address'>
+
+				</div>
+			</div>
+			<div id='invoice'>
+
+			</div>
+		</main>
+		<footer>
+			<p>Standard Legal boilerplate here, even though its meaningless.</p>
+			<p>Don't read if your not the intended meatsack etc...</p>
+			<p>Eco friendly company despite this being on paper etc..</p>
+		</footer>
+		<div class='templates' style='display: none'>
+			<div id='invoiceTemplate'>
+				<p class='account-number'>Account Number: <span>{{accountNumber}}</span></p>
+				<p class='addressee'>Dear {{addressee}},</p>
+				<div class='message'>
+					<p>We are invoicing you for the for the following:</p>
+				</div>
+			</div>
+		</div>
+		<script>
+			function renderAddress(address, addressId) {
+				const addressSection = document.querySelector(addressId);
+				addressSection.innerHTML = Mustache.render('<p class=\'addressee\'>{{addressee}}</p>', {addressee: address.addressee});
+
+				address.address.forEach(section => {
+					addressSection.innerHTML += Mustache.render('<p>{{section}}</p>', {section: section});
+				});
+			}
+
+			function renderInvoice(invoice) {
+				const invoiceTemplate = document.querySelector('#invoiceTemplate').innerHTML;
+
+				document.querySelector('#invoice').innerHTML = Mustache.render(invoiceTemplate, invoice);
+			}
+			function render(content) {
+				renderAddress(content.myAddress, '.my-address');
+				renderAddress(content.yourAddress, '.your-address');
+				renderInvoice(content.invoice);
+			}
+
+			render({
+				myAddress: {
+					addressee: 'Dr Jeb Kerman',
+					address: [
+						'1 Kerbal way',
+						'Kerbal City',
+						'K34 k43',
+						'Kerbal Land'
+					]
+				},
+				yourAddress: {
+					addressee: 'Mr Bob Kerman',
+					address: [
+						'2 Kerbal way',
+						'Kerbal City',
+						'K34 k43',
+						'Kerbal Land'
+					]
+				},
+				invoice: {
+					addressee: 'Mr Bob Kerman',
+					accountNumber: '3432408'
+				}
+			})
+		</script>
+	</body>
+</html>
